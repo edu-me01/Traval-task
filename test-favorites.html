@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Favorites - Travel Planner</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- SweetAlert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px 0;
+        }
+        
+        .container {
+            max-width: 1200px;
+        }
+        
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            margin-bottom: 20px;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card-img-top {
+            height: 200px;
+            object-fit: cover;
+            border-radius: 15px 15px 0 0;
+        }
+        
+        .btn-heart {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(220, 53, 69, 0.9);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-heart:hover {
+            background: #dc3545;
+            transform: scale(1.1);
+        }
+        
+        .btn-heart.added {
+            background: #dc3545;
+        }
+        
+        .favorites-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .favorite-item {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        
+        .remove-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .login-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .user-info {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center text-white mb-4">
+            <i class="fas fa-heart me-3"></i>Test Favorites System
+        </h1>
+        
+        <!-- Login Section -->
+        <div class="login-section" id="loginSection">
+            <h3><i class="fas fa-sign-in-alt me-2"></i>Login</h3>
+            <form id="loginForm">
+                <div class="row">
+                    <div class="col-md-4">
+                        <input type="email" class="form-control" id="loginEmail" placeholder="Email" required>
+                    </div>
+                    <div class="col-md-4">
+                        <input type="password" class="form-control" id="loginPassword" placeholder="Password" required>
+                    </div>
+                    <div class="col-md-4">
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="fas fa-sign-in-alt me-2"></i>Login
+                        </button>
+                    </div>
+                </div>
+            </form>
+            <small class="text-muted">Use: demo@example.com / password</small>
+        </div>
+        
+        <!-- User Info Section -->
+        <div class="user-info" id="userSection" style="display: none;">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h4 class="mb-0">Welcome, <span id="userName">User</span>!</h4>
+                    <small class="text-muted">You are logged in</small>
+                </div>
+                <button class="btn btn-outline-danger" onclick="logout()">
+                    <i class="fas fa-sign-out-alt me-2"></i>Logout
+                </button>
+            </div>
+        </div>
+        
+        <!-- Sample Destinations -->
+        <div class="favorites-section">
+            <h3><i class="fas fa-globe me-2"></i>Sample Destinations</h3>
+            <p class="text-muted">Click the heart icon to add destinations to your favorites</p>
+            
+            <div class="row" id="destinationsGrid">
+                <!-- Destinations will be loaded here -->
+            </div>
+        </div>
+        
+        <!-- Favorites Section -->
+        <div class="favorites-section">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h3><i class="fas fa-heart me-2"></i>My Favorites</h3>
+                <button class="btn btn-outline-danger" onclick="clearAllFavorites()" id="clearAllBtn" style="display: none;">
+                    <i class="fas fa-trash me-2"></i>Clear All
+                </button>
+            </div>
+            
+            <div id="favoritesList">
+                <div class="text-center text-muted" id="emptyFavorites">
+                    <i class="fas fa-heart fa-3x mb-3"></i>
+                    <h5>No favorites yet</h5>
+                    <p>Add some destinations to see them here!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Sample destinations data
+        const sampleDestinations = [
+            {
+                id: 1,
+                name: 'Paris, France',
+                description: 'The City of Light with iconic landmarks like the Eiffel Tower and Louvre Museum.',
+                image: 'https://images.unsplash.com/photo-1502602898534-47d6b7a83f8f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1368&q=80',
+                region: 'Europe'
+            },
+            {
+                id: 2,
+                name: 'Tokyo, Japan',
+                description: 'A fascinating blend of ultramodern and traditional, offering endless discoveries.',
+                image: 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?ixlib=rb-4.0.3&auto=format&fit=crop&w=1368&q=80',
+                region: 'Asia'
+            },
+            {
+                id: 3,
+                name: 'New York, USA',
+                description: 'The city that never sleeps, home to Times Square and Central Park.',
+                image: 'https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1368&q=80',
+                region: 'Americas'
+            },
+            {
+                id: 4,
+                name: 'Sydney, Australia',
+                description: 'Famous for its Opera House and beautiful harbor views.',
+                image: 'https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1368&q=80',
+                region: 'Oceania'
+            },
+            {
+                id: 5,
+                name: 'Cairo, Egypt',
+                description: 'Home to the ancient Pyramids and rich in history and culture.',
+                image: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1368&q=80',
+                region: 'Africa'
+            },
+            {
+                id: 6,
+                name: 'Rio de Janeiro, Brazil',
+                description: 'Famous for Carnival, Christ the Redeemer, and beautiful beaches.',
+                image: 'https://images.unsplash.com/photo-1483729558449-99ef09a8c325?ixlib=rb-4.0.3&auto=format&fit=crop&w=1368&q=80',
+                region: 'Americas'
+            }
+        ];
+
+        let currentUser = null;
+        let favorites = [];
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuthStatus();
+            loadDestinations();
+            loadFavorites();
+        });
+
+        // Check authentication status
+        function checkAuthStatus() {
+            const user = localStorage.getItem('currentUser');
+            if (user) {
+                currentUser = JSON.parse(user);
+                showUserSection();
+            } else {
+                showLoginSection();
+            }
+        }
+
+        // Show user section when logged in
+        function showUserSection() {
+            document.getElementById('loginSection').style.display = 'none';
+            document.getElementById('userSection').style.display = 'block';
+            document.getElementById('userName').textContent = currentUser.name || 'User';
+        }
+
+        // Show login section when not logged in
+        function showLoginSection() {
+            document.getElementById('loginSection').style.display = 'block';
+            document.getElementById('userSection').style.display = 'none';
+        }
+
+        // Load destinations
+        function loadDestinations() {
+            const grid = document.getElementById('destinationsGrid');
+            grid.innerHTML = sampleDestinations.map(dest => `
+                <div class="col-md-4">
+                    <div class="card position-relative">
+                        <img src="${dest.image}" class="card-img-top" alt="${dest.name}">
+                        <button class="btn-heart" onclick="toggleFavorite(${dest.id})" id="heart-${dest.id}">
+                            <i class="fas fa-heart"></i>
+                        </button>
+                        <div class="card-body">
+                            <h5 class="card-title">${dest.name}</h5>
+                            <p class="card-text">${dest.description}</p>
+                            <span class="badge bg-primary">${dest.region}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Load favorites from localStorage
+        function loadFavorites() {
+            const storedFavorites = localStorage.getItem('favorites');
+            favorites = storedFavorites ? JSON.parse(storedFavorites) : [];
+            displayFavorites();
+            updateHeartButtons();
+        }
+
+        // Save favorites to localStorage
+        function saveFavorites() {
+            localStorage.setItem('favorites', JSON.stringify(favorites));
+        }
+
+        // Display favorites
+        function displayFavorites() {
+            const favoritesList = document.getElementById('favoritesList');
+            const emptyFavorites = document.getElementById('emptyFavorites');
+            const clearAllBtn = document.getElementById('clearAllBtn');
+
+            if (favorites.length === 0) {
+                emptyFavorites.style.display = 'block';
+                clearAllBtn.style.display = 'none';
+                favoritesList.innerHTML = '';
+            } else {
+                emptyFavorites.style.display = 'none';
+                clearAllBtn.style.display = 'inline-block';
+
+                favoritesList.innerHTML = favorites.map((favorite, index) => `
+                    <div class="favorite-item">
+                        <button class="remove-btn" onclick="removeFavorite(${index})" title="Remove from favorites">
+                            <i class="fas fa-times"></i>
+                        </button>
+                        <div class="row">
+                            <div class="col-md-2">
+                                <img src="${favorite.image}" alt="${favorite.name}" style="width: 100%; border-radius: 10px;">
+                            </div>
+                            <div class="col-md-10">
+                                <h5>${favorite.name}</h5>
+                                <p class="text-muted">${favorite.description}</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="badge bg-primary">${favorite.region}</span>
+                                    <small class="text-muted">
+                                        <i class="fas fa-calendar me-1"></i>${formatDate(favorite.dateAdded)}
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // Update heart buttons to show added state
+        function updateHeartButtons() {
+            sampleDestinations.forEach(dest => {
+                const heartBtn = document.getElementById(`heart-${dest.id}`);
+                if (heartBtn) {
+                    const isFavorite = favorites.some(fav => fav.id === dest.id.toString());
+                    if (isFavorite) {
+                        heartBtn.classList.add('added');
+                    } else {
+                        heartBtn.classList.remove('added');
+                    }
+                }
+            });
+        }
+
+        // Toggle favorite
+        function toggleFavorite(destinationId) {
+            if (!currentUser) {
+                Swal.fire({
+                    title: 'Login Required',
+                    text: 'Please login to add items to favorites.',
+                    icon: 'info',
+                    confirmButtonText: 'OK'
+                });
+                return;
+            }
+
+            const destination = sampleDestinations.find(dest => dest.id === destinationId);
+            if (!destination) return;
+
+            const favoriteId = destinationId.toString();
+            const existingIndex = favorites.findIndex(fav => fav.id === favoriteId);
+
+            if (existingIndex !== -1) {
+                // Remove from favorites
+                favorites.splice(existingIndex, 1);
+                Swal.fire({
+                    title: 'Removed from Favorites!',
+                    text: `${destination.name} has been removed from your favorites.`,
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                });
+            } else {
+                // Add to favorites
+                const favorite = {
+                    id: favoriteId,
+                    name: destination.name,
+                    description: destination.description,
+                    image: destination.image,
+                    region: destination.region,
+                    dateAdded: new Date().toISOString()
+                };
+                favorites.push(favorite);
+                Swal.fire({
+                    title: 'Added to Favorites!',
+                    text: `${destination.name} has been added to your favorites.`,
+                    icon: 'success',
+                    confirmButtonText: 'Great!'
+                });
+            }
+
+            saveFavorites();
+            displayFavorites();
+            updateHeartButtons();
+        }
+
+        // Remove favorite
+        function removeFavorite(index) {
+            Swal.fire({
+                title: 'Remove Favorite?',
+                text: 'Are you sure you want to remove this item from your favorites?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#dc3545',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Yes, remove it',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const removed = favorites.splice(index, 1)[0];
+                    saveFavorites();
+                    displayFavorites();
+                    updateHeartButtons();
+
+                    Swal.fire({
+                        title: 'Removed!',
+                        text: `${removed.name} has been removed from your favorites.`,
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            });
+        }
+
+        // Clear all favorites
+        function clearAllFavorites() {
+            Swal.fire({
+                title: 'Clear All Favorites?',
+                text: 'This action cannot be undone. All your favorites will be permanently removed.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#dc3545',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Yes, clear all',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    favorites = [];
+                    saveFavorites();
+                    displayFavorites();
+                    updateHeartButtons();
+
+                    Swal.fire({
+                        title: 'Cleared!',
+                        text: 'All favorites have been removed.',
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            });
+        }
+
+        // Handle login form
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value.trim();
+            
+            // Simple validation
+            if (!email || !password) {
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Please fill in all fields.',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+                return;
+            }
+            
+            // Simple authentication
+            if (email === 'demo@example.com' && password === 'password') {
+                const user = {
+                    id: 1,
+                    name: 'Demo User',
+                    email: email
+                };
+                localStorage.setItem('currentUser', JSON.stringify(user));
+                currentUser = user;
+                
+                showUserSection();
+                
+                Swal.fire({
+                    title: 'Welcome!',
+                    text: 'You have been successfully logged in.',
+                    icon: 'success',
+                    confirmButtonText: 'Continue'
+                });
+            } else {
+                Swal.fire({
+                    title: 'Login Failed',
+                    text: 'Invalid email or password. Try: demo@example.com / password',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+            }
+        });
+
+        // Logout function
+        function logout() {
+            Swal.fire({
+                title: 'Logout',
+                text: 'Are you sure you want to logout?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#667eea',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Yes, logout',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    localStorage.removeItem('currentUser');
+                    currentUser = null;
+                    
+                    showLoginSection();
+                    
+                    Swal.fire({
+                        title: 'Logged Out',
+                        text: 'You have been successfully logged out.',
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            });
+        }
+
+        // Format date
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', { 
+                year: 'numeric', 
+                month: 'short', 
+                day: 'numeric' 
+            });
+        }
+    </script>
+</body>
+</html> 

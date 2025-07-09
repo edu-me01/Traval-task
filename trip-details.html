@@ -369,6 +369,9 @@
                     <li class="nav-item">
                         <a class="nav-link" href="my-trips.html">My Trips</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="favorites.html">Favorites</a>
+                    </li>
                 </ul>
                 <div class="d-flex">
                     <a href="auth.html" class="btn btn-outline-light">
@@ -598,6 +601,9 @@
                         <button class="btn btn-primary" onclick="addToTrips(${data.id})">
                             <i class="fas fa-plus me-2"></i>Add to My Trips
                         </button>
+                        <button class="btn btn-outline-primary" onclick="addToFavorites(${data.id})">
+                            <i class="fas fa-heart me-2"></i>Add to Favorites
+                        </button>
                         <button class="btn btn-outline-primary" onclick="shareDestination()">
                             <i class="fas fa-share me-2"></i>Share Destination
                         </button>
@@ -642,6 +648,59 @@
                     confirmButtonText: 'OK'
                 });
             }
+        }
+        
+        function addToFavorites(destinationId) {
+            // Check if user is logged in
+            const currentUser = localStorage.getItem('currentUser') || sessionStorage.getItem('currentUser');
+            if (!currentUser) {
+                Swal.fire({
+                    title: 'Login Required',
+                    text: 'Please login to add items to favorites.',
+                    icon: 'info',
+                    confirmButtonText: 'OK'
+                });
+                return;
+            }
+
+            // Get existing favorites from localStorage
+            const storedFavorites = localStorage.getItem('favorites');
+            const favorites = storedFavorites ? JSON.parse(storedFavorites) : [];
+
+            // Check if already exists
+            const exists = favorites.some(fav => fav.id === destinationId.toString());
+            if (exists) {
+                Swal.fire({
+                    title: 'Already Added',
+                    text: 'This destination is already in your favorites.',
+                    icon: 'info',
+                    confirmButtonText: 'OK'
+                });
+                return;
+            }
+
+            // Create favorite object using the current destination data
+            const favorite = {
+                id: destinationId.toString(),
+                name: document.querySelector('.destination-title')?.textContent || 'Destination',
+                description: document.querySelector('.destination-description')?.textContent?.substring(0, 100) + '...' || 'Amazing destination to visit.',
+                image: document.querySelector('.destination-image')?.src || 'https://images.unsplash.com/photo-1502602898534-47d6b7a83f8f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1368&q=80',
+                region: document.querySelector('.destination-region')?.textContent || 'Unknown',
+                type: 'Destination',
+                link: `trip-details.html?id=${destinationId}`,
+                dateAdded: new Date().toISOString()
+            };
+
+            // Add to favorites
+            favorites.push(favorite);
+            localStorage.setItem('favorites', JSON.stringify(favorites));
+
+            Swal.fire({
+                title: 'Added to Favorites!',
+                text: `${favorite.name} has been added to your favorites.`,
+                icon: 'success',
+                confirmButtonText: 'Great!'
+            });
         }
         
         function shareDestination() {

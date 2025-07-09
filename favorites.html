@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel Planner - Favorites</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- SweetAlert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .favorites-hero {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.9) 0%, rgba(118, 75, 162, 0.9) 100%);
+            padding: 4rem 0 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .favorites-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/><circle cx="10" cy="60" r="0.5" fill="white" opacity="0.1"/><circle cx="90" cy="40" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            opacity: 0.3;
+        }
+        
+        .favorites-hero h1 {
+            font-weight: 700;
+            color: white;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .favorites-hero p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.1rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .favorites-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .favorites-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .favorites-title {
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: #495057;
+            margin: 0;
+        }
+        
+        .favorites-actions {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 12px;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-outline-danger {
+            border: 2px solid #dc3545;
+            color: #dc3545;
+            border-radius: 12px;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-outline-danger:hover {
+            background: #dc3545;
+            border-color: #dc3545;
+            transform: translateY(-2px);
+        }
+        
+        .favorite-item {
+            background: white;
+            border: none;
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            height: 100%;
+            position: relative;
+        }
+        
+        .favorite-item:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .favorite-item img {
+            height: 200px;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        
+        .favorite-item:hover img {
+            transform: scale(1.05);
+        }
+        
+        .remove-favorite {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(220, 53, 69, 0.9);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            z-index: 2;
+        }
+        
+        .remove-favorite:hover {
+            background: #dc3545;
+            transform: scale(1.1);
+        }
+        
+        .card-body {
+            padding: 1.5rem;
+        }
+        
+        .card-title {
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 0.5rem;
+        }
+        
+        .card-text {
+            color: #6c757d;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+        
+        .favorite-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            font-size: 0.85rem;
+        }
+        
+        .favorite-date {
+            color: #667eea;
+            font-weight: 500;
+        }
+        
+        .favorite-type {
+            color: #6c757d;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: #6c757d;
+        }
+        
+        .empty-state i {
+            font-size: 4rem;
+            color: #dee2e6;
+            margin-bottom: 1.5rem;
+        }
+        
+        .empty-state h3 {
+            color: #495057;
+            margin-bottom: 1rem;
+        }
+        
+        .empty-state p {
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+        
+        .login-modal {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .form-control {
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+        
+        .form-control:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+            background: white;
+        }
+        
+        .form-label {
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 0.5rem;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: white;
+        }
+        
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+        
+        .dropdown-menu {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .dropdown-item {
+            border-radius: 8px;
+            margin: 0.25rem;
+            transition: all 0.3s ease;
+        }
+        
+        .dropdown-item:hover {
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+        }
+        
+        @media (max-width: 768px) {
+            .favorites-hero {
+                padding: 2rem 0 1rem;
+            }
+            
+            .favorites-hero h1 {
+                font-size: 2rem;
+            }
+            
+            .favorites-container {
+                margin: 0 1rem 2rem;
+                padding: 1.5rem;
+            }
+            
+            .favorites-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .favorites-actions {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="index.html">
+                <i class="fas fa-plane me-2"></i>Travel Planner
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="destinations.html">Destinations</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="my-trips.html">My Trips</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="favorites.html">Favorites</a>
+                    </li>
+                </ul>
+                <div class="d-flex" id="authSection">
+                    <!-- Login/Register buttons will be shown here for non-authenticated users -->
+                    <a href="auth.html" class="btn btn-outline-light me-2">
+                        <i class="fas fa-user me-2"></i>Login
+                    </a>
+                    <a href="auth.html" class="btn btn-outline-light">
+                        <i class="fas fa-user-plus me-2"></i>Register
+                    </a>
+                </div>
+                <div class="d-flex" id="userSection" style="display: none;">
+                    <!-- User info will be shown here for authenticated users -->
+                    <div class="dropdown">
+                        <button class="btn btn-outline-light dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown">
+                            <div class="user-info">
+                                <div class="user-avatar" id="userAvatar">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                <span id="userName">User</span>
+                            </div>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="favorites.html">
+                                <i class="fas fa-heart me-2"></i>My Favorites
+                            </a></li>
+                            <li><a class="dropdown-item" href="my-trips.html">
+                                <i class="fas fa-suitcase me-2"></i>My Trips
+                            </a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" onclick="logout()">
+                                <i class="fas fa-sign-out-alt me-2"></i>Logout
+                            </a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="favorites-hero">
+        <div class="container text-center">
+            <h1><i class="fas fa-heart me-3"></i>My Favorites</h1>
+            <p>Save and organize your favorite destinations and trips</p>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="favorites-container">
+            <div class="favorites-header">
+                <h2 class="favorites-title">
+                    <i class="fas fa-heart me-2"></i>Saved Favorites
+                </h2>
+                <div class="favorites-actions">
+                    <button class="btn btn-primary" onclick="addSampleFavorites()" id="addSampleBtn" style="display: none;">
+                        <i class="fas fa-plus me-2"></i>Add Sample Items
+                    </button>
+                    <button class="btn btn-outline-danger" onclick="clearAllFavorites()" id="clearAllBtn" style="display: none;">
+                        <i class="fas fa-trash me-2"></i>Clear All
+                    </button>
+                </div>
+            </div>
+
+            <!-- Empty State -->
+            <div class="empty-state" id="emptyState">
+                <i class="fas fa-heart"></i>
+                <h3>No favorites yet</h3>
+                <p>Start exploring destinations and add them to your favorites to see them here.</p>
+                <a href="destinations.html" class="btn btn-primary">
+                    <i class="fas fa-search me-2"></i>Explore Destinations
+                </a>
+            </div>
+
+            <!-- Favorites Grid -->
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4" id="favoritesGrid">
+                <!-- Favorites will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div class="modal fade" id="loginModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content login-modal">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title">
+                        <i class="fas fa-sign-in-alt me-2"></i>Login Required
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="text-muted mb-3">Please login to manage your favorites.</p>
+                    <form id="loginForm">
+                        <div class="mb-3">
+                            <label for="loginEmail" class="form-label">
+                                <i class="fas fa-envelope me-2"></i>Email Address
+                            </label>
+                            <input type="email" class="form-control" id="loginEmail" placeholder="Enter your email" required>
+                            <div class="invalid-feedback" id="emailError"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="loginPassword" class="form-label">
+                                <i class="fas fa-lock me-2"></i>Password
+                            </label>
+                            <input type="password" class="form-control" id="loginPassword" placeholder="Enter your password" required>
+                            <div class="invalid-feedback" id="passwordError"></div>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-sign-in-alt me-2"></i>Login
+                            </button>
+                        </div>
+                    </form>
+                    <hr class="my-3">
+                    <div class="text-center">
+                        <p class="mb-2">Don't have an account?</p>
+                        <a href="auth.html" class="btn btn-outline-primary">
+                            <i class="fas fa-user-plus me-2"></i>Create Account
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container text-center">
+            <p class="mb-0">&copy; 2023 Travel Planner. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Favorites functionality - Pure client-side with localStorage
+        let currentUser = null;
+        let favorites = [];
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuthStatus();
+            loadFavorites();
+        });
+
+        // Check authentication status
+        function checkAuthStatus() {
+            const user = localStorage.getItem('currentUser') || sessionStorage.getItem('currentUser');
+            
+            if (user) {
+                currentUser = JSON.parse(user);
+                showUserSection();
+            } else {
+                showAuthSection();
+            }
+        }
+
+        // Show user section when logged in
+        function showUserSection() {
+            document.getElementById('authSection').style.display = 'none';
+            document.getElementById('userSection').style.display = 'flex';
+            
+            // Update user info
+            const userName = document.getElementById('userName');
+            const userAvatar = document.getElementById('userAvatar');
+            
+            if (currentUser) {
+                userName.textContent = currentUser.name || 'User';
+                userAvatar.innerHTML = `<i class="fas fa-user"></i>`;
+            }
+        }
+
+        // Show auth section when not logged in
+        function showAuthSection() {
+            document.getElementById('authSection').style.display = 'flex';
+            document.getElementById('userSection').style.display = 'none';
+        }
+
+        // Load favorites from localStorage
+        function loadFavorites() {
+            const storedFavorites = localStorage.getItem('favorites');
+            favorites = storedFavorites ? JSON.parse(storedFavorites) : [];
+            displayFavorites();
+        }
+
+        // Save favorites to localStorage
+        function saveFavorites() {
+            localStorage.setItem('favorites', JSON.stringify(favorites));
+        }
+
+        // Display favorites
+        function displayFavorites() {
+            const grid = document.getElementById('favoritesGrid');
+            const emptyState = document.getElementById('emptyState');
+            const addSampleBtn = document.getElementById('addSampleBtn');
+            const clearAllBtn = document.getElementById('clearAllBtn');
+
+            if (favorites.length === 0) {
+                emptyState.style.display = 'block';
+                grid.innerHTML = '';
+                addSampleBtn.style.display = 'inline-block';
+                clearAllBtn.style.display = 'none';
+            } else {
+                emptyState.style.display = 'none';
+                addSampleBtn.style.display = 'none';
+                clearAllBtn.style.display = 'inline-block';
+
+                grid.innerHTML = favorites.map((favorite, index) => `
+                    <div class="col">
+                        <div class="favorite-item">
+                            <button class="remove-favorite" onclick="removeFavorite(${index})" title="Remove from favorites">
+                                <i class="fas fa-times"></i>
+                            </button>
+                            <img src="${favorite.image}" alt="${favorite.name}" class="card-img-top">
+                            <div class="card-body">
+                                <h5 class="card-title">${favorite.name}</h5>
+                                <p class="card-text">${favorite.description}</p>
+                                <div class="favorite-meta">
+                                    <span class="favorite-date">
+                                        <i class="fas fa-calendar me-1"></i>${formatDate(favorite.dateAdded)}
+                                    </span>
+                                    <span class="favorite-type">
+                                        <i class="fas fa-tag me-1"></i>${favorite.type}
+                                    </span>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="badge bg-primary">${favorite.region}</span>
+                                    <a href="${favorite.link}" class="btn btn-primary btn-sm">
+                                        <i class="fas fa-eye me-1"></i>View
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // Add a favorite
+        function addFavorite(favorite) {
+            if (!currentUser) {
+                showLoginModal();
+                return;
+            }
+
+            // Check if already exists
+            const exists = favorites.some(fav => fav.id === favorite.id);
+            if (exists) {
+                Swal.fire({
+                    title: 'Already Added',
+                    text: 'This item is already in your favorites.',
+                    icon: 'info',
+                    confirmButtonText: 'OK'
+                });
+                return;
+            }
+
+            favorite.dateAdded = new Date().toISOString();
+            favorites.push(favorite);
+            saveFavorites();
+            displayFavorites();
+
+            Swal.fire({
+                title: 'Added to Favorites!',
+                text: `${favorite.name} has been added to your favorites.`,
+                icon: 'success',
+                confirmButtonText: 'Great!'
+            });
+        }
+
+        // Remove a favorite
+        function removeFavorite(index) {
+            Swal.fire({
+                title: 'Remove Favorite?',
+                text: 'Are you sure you want to remove this item from your favorites?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#dc3545',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Yes, remove it',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const removed = favorites.splice(index, 1)[0];
+                    saveFavorites();
+                    displayFavorites();
+
+                    Swal.fire({
+                        title: 'Removed!',
+                        text: `${removed.name} has been removed from your favorites.`,
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            });
+        }
+
+        // Clear all favorites
+        function clearAllFavorites() {
+            Swal.fire({
+                title: 'Clear All Favorites?',
+                text: 'This action cannot be undone. All your favorites will be permanently removed.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#dc3545',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Yes, clear all',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    favorites = [];
+                    saveFavorites();
+                    displayFavorites();
+
+                    Swal.fire({
+                        title: 'Cleared!',
+                        text: 'All favorites have been removed.',
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            });
+        }
+
+        // Add sample favorites for demo
+        function addSampleFavorites() {
+            const sampleFavorites = [
+                {
+                    id: 'paris',
+                    name: 'Paris, France',
+                    description: 'The City of Light awaits with its iconic landmarks and rich culture.',
+                    image: 'https://images.unsplash.com/photo-1502602898534-47d6b7a83f8f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1368&q=80',
+                    region: 'Europe',
+                    type: 'Destination',
+                    link: 'trip-details.html?id=1'
+                },
+                {
+                    id: 'tokyo',
+                    name: 'Tokyo, Japan',
+                    description: 'Experience the perfect blend of tradition and innovation.',
+                    image: 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1368&q=80',
+                    region: 'Asia',
+                    type: 'Destination',
+                    link: 'trip-details.html?id=2'
+                },
+                {
+                    id: 'nyc',
+                    name: 'New York, USA',
+                    description: 'The city that never sleeps offers endless possibilities.',
+                    image: 'https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1368&q=80',
+                    region: 'Americas',
+                    type: 'Destination',
+                    link: 'trip-details.html?id=3'
+                }
+            ];
+
+            sampleFavorites.forEach(favorite => {
+                addFavorite(favorite);
+            });
+        }
+
+        // Show login modal
+        function showLoginModal() {
+            const loginModal = new bootstrap.Modal(document.getElementById('loginModal'));
+            loginModal.show();
+        }
+
+        // Handle login form submission
+        document.getElementById('loginForm')?.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value.trim();
+            
+            // Reset validation
+            resetValidation();
+            
+            // Validate fields
+            let isValid = true;
+            
+            if (!email) {
+                showFieldError('loginEmail', 'Email is required');
+                isValid = false;
+            } else if (!isValidEmail(email)) {
+                showFieldError('loginEmail', 'Please enter a valid email address');
+                isValid = false;
+            }
+            
+            if (!password) {
+                showFieldError('loginPassword', 'Password is required');
+                isValid = false;
+            }
+            
+            if (!isValid) {
+                return;
+            }
+            
+            // Simple client-side authentication
+            if (email === 'demo@example.com' && password === 'password') {
+                // Store user data
+                const user = {
+                    id: 1,
+                    name: 'Demo User',
+                    email: email
+                };
+                localStorage.setItem('currentUser', JSON.stringify(user));
+                currentUser = user;
+                
+                // Close modal and update UI
+                const loginModal = bootstrap.Modal.getInstance(document.getElementById('loginModal'));
+                loginModal.hide();
+                
+                showUserSection();
+                
+                Swal.fire({
+                    title: 'Welcome Back!',
+                    text: 'You have been successfully logged in.',
+                    icon: 'success',
+                    confirmButtonText: 'Continue'
+                });
+            } else {
+                Swal.fire({
+                    title: 'Login Failed',
+                    text: 'Invalid email or password. Try demo@example.com / password',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+            }
+        });
+
+        // Email validation
+        function isValidEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+
+        // Show field error
+        function showFieldError(fieldId, message) {
+            const field = document.getElementById(fieldId);
+            const errorDiv = document.getElementById(fieldId.replace('login', '').toLowerCase() + 'Error');
+            
+            field.classList.add('is-invalid');
+            if (errorDiv) {
+                errorDiv.textContent = message;
+            }
+        }
+
+        // Reset validation
+        function resetValidation() {
+            const fields = ['loginEmail', 'loginPassword'];
+            fields.forEach(fieldId => {
+                const field = document.getElementById(fieldId);
+                field.classList.remove('is-invalid');
+            });
+        }
+
+        // Logout function
+        function logout() {
+            Swal.fire({
+                title: 'Logout',
+                text: 'Are you sure you want to logout?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#667eea',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Yes, logout',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    localStorage.removeItem('currentUser');
+                    sessionStorage.removeItem('currentUser');
+                    currentUser = null;
+                    
+                    showAuthSection();
+                    
+                    Swal.fire({
+                        title: 'Logged Out',
+                        text: 'You have been successfully logged out.',
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            });
+        }
+
+        // Format date
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', { 
+                year: 'numeric', 
+                month: 'short', 
+                day: 'numeric' 
+            });
+        }
+
+        // Global function to add favorite (can be called from other pages)
+        window.addToFavorites = function(favorite) {
+            addFavorite(favorite);
+        };
+    </script>
+</body>
+</html> 
