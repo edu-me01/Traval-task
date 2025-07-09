@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel Planner - Home</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- SweetAlert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .hero-section {
+            background:  url('https://images.unsplash.com/photo-1506929562872-bb421503ef21?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1368&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            padding: 8rem 0 6rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/><circle cx="10" cy="60" r="0.5" fill="white" opacity="0.1"/><circle cx="90" cy="40" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            opacity: 0.3;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .hero-subtitle {
+            font-size: 1.3rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 2rem;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        }
+        
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 12px;
+            padding: 1rem 2rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-outline-light {
+            border: 2px solid white;
+            color: white;
+            border-radius: 12px;
+            padding: 1rem 2rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-outline-light:hover {
+            background: white;
+            color: #667eea;
+            transform: translateY(-2px);
+        }
+        
+        .features-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 4rem 2rem;
+            margin: -3rem auto 4rem;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 3;
+            max-width: 1200px;
+        }
+        
+        .feature-card {
+            text-align: center;
+            padding: 2rem 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
+            color: #667eea;
+            margin-bottom: 1.5rem;
+        }
+        
+        .feature-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 1rem;
+        }
+        
+        .feature-text {
+            color: #6c757d;
+            line-height: 1.6;
+        }
+        
+        .destinations-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 4rem 2rem;
+            margin-bottom: 4rem;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #495057;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+        
+        .section-subtitle {
+            color: #6c757d;
+            text-align: center;
+            font-size: 1.1rem;
+            margin-bottom: 3rem;
+        }
+        
+        .destination-card {
+            background: white;
+            border: none;
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            height: 100%;
+        }
+        
+        .destination-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .destination-card img {
+            height: 200px;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        
+        .destination-card:hover img {
+            transform: scale(1.05);
+        }
+        
+        .card-body {
+            padding: 1.5rem;
+        }
+        
+        .card-title {
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 0.5rem;
+        }
+        
+        .card-text {
+            color: #6c757d;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+        
+        .region-badge {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .stats-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 4rem 2rem;
+            margin-bottom: 4rem;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 2rem 1rem;
+        }
+        
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            color: #6c757d;
+            font-weight: 500;
+            font-size: 1.1rem;
+        }
+        
+        .cta-section {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.9) 0%, rgba(118, 75, 162, 0.9) 100%);
+            border-radius: 20px;
+            padding: 4rem 2rem;
+            margin-bottom: 4rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/><circle cx="10" cy="60" r="0.5" fill="white" opacity="0.1"/><circle cx="90" cy="40" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            opacity: 0.3;
+        }
+        
+        .cta-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .cta-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 1rem;
+        }
+        
+        .cta-text {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .loading-spinner {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 3rem;
+        }
+        
+        .spinner-border {
+            width: 3rem;
+            height: 3rem;
+            color: #667eea;
+        }
+        
+        @media (max-width: 768px) {
+            .hero-section {
+                padding: 4rem 0 3rem;
+            }
+            
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.1rem;
+            }
+            
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .features-section {
+                margin: -2rem 1rem 3rem;
+                padding: 2rem 1rem;
+            }
+            
+            .destinations-section {
+                margin: 0 1rem 3rem;
+                padding: 2rem 1rem;
+            }
+            
+            .stats-section {
+                margin: 0 1rem 3rem;
+                padding: 2rem 1rem;
+            }
+            
+            .cta-section {
+                margin: 0 1rem 3rem;
+                padding: 2rem 1rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .cta-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="index.html">
+                <i class="fas fa-plane me-2"></i>Travel Planner
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="destinations.html">Destinations</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="my-trips.html">My Trips</a>
+                    </li>
+                </ul>
+                <div class="d-flex">
+                    <a href="auth.html" class="btn btn-outline-light">
+                        <i class="fas fa-user me-2"></i>Login/Register
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero-section">
+        <div class="container text-center hero-content">
+            <h1 class="hero-title">
+                <i class="fas fa-globe-americas me-3"></i>Plan Your Dream Vacation
+            </h1>
+            <p class="hero-subtitle">Discover amazing destinations and organize your perfect trip with our comprehensive travel planning platform</p>
+            <div class="hero-buttons">
+                <a href="destinations.html" class="btn btn-primary btn-lg">
+                    <i class="fas fa-search me-2"></i>Explore Destinations
+                </a>
+                <a href="auth.html" class="btn btn-outline-light btn-lg">
+                    <i class="fas fa-user-plus me-2"></i>Get Started
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Features Section -->
+    <div class="container">
+        <div class="features-section">
+            <div class="row">
+                <div class="col-lg-3 col-md-6">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <h3 class="feature-title">Discover Destinations</h3>
+                        <p class="feature-text">Explore thousands of amazing destinations around the world with detailed information and stunning photos.</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-calendar-alt"></i>
+                        </div>
+                        <h3 class="feature-title">Plan Your Trip</h3>
+                        <p class="feature-text">Create detailed itineraries, set travel dates, and organize your perfect vacation with our intuitive planner.</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-cloud-sun"></i>
+                        </div>
+                        <h3 class="feature-title">Weather Info</h3>
+                        <p class="feature-text">Get real-time weather information for your destinations to help you pack and plan accordingly.</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-share-alt"></i>
+                        </div>
+                        <h3 class="feature-title">Share & Collaborate</h3>
+                        <p class="feature-text">Share your travel plans with friends and family, or collaborate on group trips together.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Featured Destinations Section -->
+        <div class="destinations-section">
+            <h2 class="section-title">
+                <i class="fas fa-star me-3"></i>Featured Destinations
+            </h2>
+            <p class="section-subtitle">Explore our handpicked selection of amazing destinations around the world</p>
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4" id="featuredDestinations">
+                <!-- Loading State -->
+                <div class="col-12">
+                    <div class="loading-spinner">
+                        <div class="spinner-border" role="status">
+                            <span class="visually-hidden">Loading featured destinations...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistics Section -->
+        <div class="stats-section">
+            <h2 class="section-title">
+                <i class="fas fa-chart-bar me-3"></i>Travel Statistics
+            </h2>
+            <p class="section-subtitle">Join thousands of travelers who trust our platform</p>
+            <div class="row">
+                <div class="col-lg-3 col-md-6">
+                    <div class="stat-item">
+                        <div class="stat-number" id="totalDestinations">250+</div>
+                        <div class="stat-label">Destinations</div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="stat-item">
+                        <div class="stat-number" id="activeUsers">10K+</div>
+                        <div class="stat-label">Active Users</div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="stat-item">
+                        <div class="stat-number" id="plannedTrips">50K+</div>
+                        <div class="stat-label">Trips Planned</div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="stat-item">
+                        <div class="stat-number" id="userRating">4.8</div>
+                        <div class="stat-label">User Rating</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Call to Action Section -->
+        <div class="cta-section">
+            <div class="cta-content">
+                <h2 class="cta-title">
+                    <i class="fas fa-rocket me-3"></i>Ready to Start Your Journey?
+                </h2>
+                <p class="cta-text">Join thousands of travelers who are already planning their next adventure with us</p>
+                <div class="hero-buttons">
+                    <a href="destinations.html" class="btn btn-primary btn-lg">
+                        <i class="fas fa-search me-2"></i>Browse Destinations
+                    </a>
+                    <a href="auth.html" class="btn btn-outline-light btn-lg">
+                        <i class="fas fa-user-plus me-2"></i>Create Account
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 text-center text-md-start">
+                    <h5 class="mb-3">
+                        <i class="fas fa-plane me-2"></i>Travel Planner
+                    </h5>
+                    <p class="mb-0">Your ultimate companion for planning the perfect vacation.</p>
+                </div>
+                <div class="col-md-6 text-center text-md-end">
+                    <div class="social-links mb-3">
+                        <a href="#" class="text-white me-3"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-white me-3"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-white me-3"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-white"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                    <p class="mb-0">&copy; 2023 Travel Planner. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="js/api.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/destinations.js"></script>
+    <script>
+        // Enhanced homepage functionality with API integration
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Load initial data
+            await loadFeaturedDestinations();
+            await loadStatistics();
+            
+            // Animate statistics on scroll
+            const stats = document.querySelectorAll('.stat-number');
+            const observerOptions = {
+                threshold: 0.5,
+                rootMargin: '0px 0px -100px 0px'
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        animateNumber(entry.target);
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+            
+            stats.forEach(stat => observer.observe(stat));
+            
+            // Add smooth animations to feature cards
+            const featureCards = document.querySelectorAll('.feature-card');
+            featureCards.forEach((card, index) => {
+                card.style.animationDelay = `${index * 0.1}s`;
+                card.classList.add('animate__animated', 'animate__fadeInUp');
+            });
+        });
+        
+        function animateNumber(element) {
+            const target = parseInt(element.textContent.replace(/\D/g, ''));
+            const duration = 2000;
+            const step = target / (duration / 16);
+            let current = 0;
+            
+            const timer = setInterval(() => {
+                current += step;
+                if (current >= target) {
+                    current = target;
+                    clearInterval(timer);
+                }
+                
+                if (element.textContent.includes('+')) {
+                    element.textContent = Math.floor(current) + '+';
+                } else if (element.textContent.includes('.')) {
+                    element.textContent = (current / 10).toFixed(1);
+                } else {
+                    element.textContent = Math.floor(current);
+                }
+            }, 16);
+        }
+        
+        // Enhanced destination loading with API
+        async function loadFeaturedDestinations() {
+            try {
+                const destinations = await travelAPI.getFeaturedDestinations();
+                displayFeaturedDestinations(destinations);
+            } catch (error) {
+                console.error('Error loading featured destinations:', error);
+                showError('Failed to load featured destinations');
+            }
+        }
+        
+        async function loadStatistics() {
+            try {
+                const stats = await travelAPI.getStatistics();
+                const destStats = await travelAPI.getDestinationStatistics();
+                const tripStats = await travelAPI.getTripStatistics();
+                
+                // Update statistics with real data
+                document.getElementById('totalDestinations').textContent = destStats.total + '+';
+                document.getElementById('activeUsers').textContent = stats.totalUsers + 'K+';
+                document.getElementById('plannedTrips').textContent = tripStats.total + 'K+';
+                document.getElementById('userRating').textContent = '4.8';
+                
+                // Animate the numbers
+                setTimeout(() => {
+                    animateNumber(document.getElementById('totalDestinations'));
+                    animateNumber(document.getElementById('activeUsers'));
+                    animateNumber(document.getElementById('plannedTrips'));
+                }, 500);
+                
+            } catch (error) {
+                console.error('Error loading statistics:', error);
+            }
+        }
+        
+        function displayFeaturedDestinations(destinations) {
+            const container = document.getElementById('featuredDestinations');
+            
+            container.innerHTML = destinations.map(dest => `
+                <div class="col">
+                    <div class="destination-card">
+                        <img src="${dest.image}" alt="${dest.name}" class="card-img-top">
+                        <div class="card-body">
+                            <h5 class="card-title">${dest.name}</h5>
+                            <p class="card-text">${dest.description.substring(0, 100)}...</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="region-badge">${dest.region}</span>
+                                <a href="trip-details.html?id=${dest.id}" class="btn btn-primary btn-sm">
+                                    <i class="fas fa-eye me-1"></i>View Details
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function showError(message) {
+            const container = document.getElementById('featuredDestinations');
+            container.innerHTML = `
+                <div class="col-12">
+                    <div class="text-center text-danger py-4">
+                        <i class="fas fa-exclamation-triangle fa-3x mb-3"></i>
+                        <h4>Error</h4>
+                        <p>${message}</p>
+                        <button class="btn btn-primary" onclick="loadFeaturedDestinations()">
+                            <i class="fas fa-refresh me-2"></i>Try Again
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>

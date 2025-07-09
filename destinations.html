@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel Planner - Destinations</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- SweetAlert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .destinations-hero {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.9) 0%, rgba(118, 75, 162, 0.9) 100%);
+            padding: 4rem 0 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .destinations-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/><circle cx="10" cy="60" r="0.5" fill="white" opacity="0.1"/><circle cx="90" cy="40" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            opacity: 0.3;
+        }
+        
+        .destinations-hero h1 {
+            font-weight: 700;
+            color: white;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .destinations-hero p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.1rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .search-filter-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            margin: -2rem auto 3rem;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+        }
+        
+        .search-filter-section h3 {
+            color: #495057;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        
+        .form-control, .form-select {
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+            background: white;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 12px;
+            padding: 0.75rem 2rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-outline-primary {
+            border: 2px solid #667eea;
+            color: #667eea;
+            border-radius: 12px;
+            padding: 0.75rem 2rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-outline-primary:hover {
+            background: #667eea;
+            border-color: #667eea;
+            transform: translateY(-2px);
+        }
+        
+        .destinations-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .destination-card {
+            background: white;
+            border: none;
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            height: 100%;
+        }
+        
+        .destination-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .destination-card img {
+            height: 200px;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        
+        .destination-card:hover img {
+            transform: scale(1.05);
+        }
+        
+        .card-body {
+            padding: 1.5rem;
+        }
+        
+        .card-title {
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 0.5rem;
+        }
+        
+        .card-text {
+            color: #6c757d;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+        
+        .destination-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .region-badge {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .population-info {
+            color: #6c757d;
+            font-size: 0.85rem;
+        }
+        
+        .no-results {
+            text-align: center;
+            padding: 3rem;
+            color: #6c757d;
+        }
+        
+        .no-results i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #dee2e6;
+        }
+        
+        .stats-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 1rem;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            color: #6c757d;
+            font-weight: 500;
+        }
+        
+        .loading-spinner {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 3rem;
+        }
+        
+        .spinner-border {
+            width: 3rem;
+            height: 3rem;
+            color: #667eea;
+        }
+        
+        @media (max-width: 768px) {
+            .destinations-hero {
+                padding: 2rem 0 1rem;
+            }
+            
+            .destinations-hero h1 {
+                font-size: 2rem;
+            }
+            
+            .search-filter-section {
+                margin: -1rem 1rem 2rem;
+                padding: 1.5rem;
+            }
+            
+            .destinations-container {
+                margin: 0 1rem 2rem;
+                padding: 1.5rem;
+            }
+            
+            .stats-section {
+                margin: 0 1rem 2rem;
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="index.html">
+                <i class="fas fa-plane me-2"></i>Travel Planner
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="destinations.html">Destinations</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="my-trips.html">My Trips</a>
+                    </li>
+                </ul>
+                <div class="d-flex">
+                    <a href="auth.html" class="btn btn-outline-light">
+                        <i class="fas fa-user me-2"></i>Login/Register
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="destinations-hero">
+        <div class="container text-center">
+            <h1><i class="fas fa-globe-americas me-3"></i>Explore Destinations</h1>
+            <p>Discover amazing places around the world and plan your next adventure</p>
+        </div>
+    </section>
+
+    <!-- Search and Filter Section -->
+    <div class="container">
+        <div class="search-filter-section">
+            <h3><i class="fas fa-search me-2"></i>Find Your Perfect Destination</h3>
+            <div class="row g-3">
+                <div class="col-lg-6">
+                    <div class="input-group">
+                        <span class="input-group-text">
+                            <i class="fas fa-search"></i>
+                        </span>
+                        <input type="text" class="form-control" placeholder="Search destinations by name..." id="searchInput">
+                        <button class="btn btn-primary" id="searchBtn">
+                            <i class="fas fa-search me-2"></i>Search
+                        </button>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="input-group">
+                        <span class="input-group-text">
+                            <i class="fas fa-globe"></i>
+                        </span>
+                        <select class="form-select" id="regionFilter">
+                            <option value="">All Regions</option>
+                            <option value="Africa">Africa</option>
+                            <option value="Americas">Americas</option>
+                            <option value="Asia">Asia</option>
+                            <option value="Europe">Europe</option>
+                            <option value="Oceania">Oceania</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <button class="btn btn-outline-primary w-100" id="clearFilters">
+                        <i class="fas fa-times me-2"></i>Clear
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistics Section -->
+        <div class="stats-section">
+            <div class="row">
+                <div class="col-md-3 col-6">
+                    <div class="stat-item">
+                        <div class="stat-number" id="totalDestinations">0</div>
+                        <div class="stat-label">Total Destinations</div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="stat-item">
+                        <div class="stat-number" id="filteredDestinations">0</div>
+                        <div class="stat-label">Showing</div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="stat-item">
+                        <div class="stat-number" id="totalRegions">5</div>
+                        <div class="stat-label">Regions</div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="stat-item">
+                        <div class="stat-number" id="totalPopulation">0</div>
+                        <div class="stat-label">Total Population</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Destinations Grid -->
+        <div class="destinations-container">
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4" id="destinationsGrid">
+                <!-- Loading State -->
+                <div class="col-12">
+                    <div class="loading-spinner">
+                        <div class="spinner-border" role="status">
+                            <span class="visually-hidden">Loading destinations...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- No Results State -->
+            <div class="no-results" id="noResults" style="display: none;">
+                <i class="fas fa-search"></i>
+                <h4>No destinations found</h4>
+                <p>Try adjusting your search criteria or filters</p>
+                <button class="btn btn-primary" onclick="clearAllFilters()">
+                    <i class="fas fa-refresh me-2"></i>Clear All Filters
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container text-center">
+            <p class="mb-0">&copy; 2023 Travel Planner. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="js/api.js"></script>
+    <script src="js/destinations.js"></script>
+    <script>
+        // Enhanced search and filter functionality with API integration
+        document.addEventListener('DOMContentLoaded', async function() {
+            const searchInput = document.getElementById('searchInput');
+            const searchBtn = document.getElementById('searchBtn');
+            const regionFilter = document.getElementById('regionFilter');
+            const clearFiltersBtn = document.getElementById('clearFilters');
+            
+            // Load initial data
+            await loadDestinations();
+            await loadStatistics();
+            await loadRegions();
+            
+            // Search functionality
+            async function performSearch() {
+                const searchTerm = searchInput.value;
+                const selectedRegion = regionFilter.value;
+                
+                // Add loading state
+                const grid = document.getElementById('destinationsGrid');
+                grid.innerHTML = `
+                    <div class="col-12">
+                        <div class="loading-spinner">
+                            <div class="spinner-border" role="status">
+                                <span class="visually-hidden">Searching...</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                try {
+                    const destinations = await travelAPI.searchDestinations(searchTerm, selectedRegion);
+                    displayDestinations(destinations);
+                    updateStats(destinations.length, destinations.length, 0);
+                } catch (error) {
+                    console.error('Error searching destinations:', error);
+                    showError('Failed to search destinations');
+                }
+            }
+            
+            // Event listeners
+            searchBtn.addEventListener('click', performSearch);
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    performSearch();
+                }
+            });
+            
+            regionFilter.addEventListener('change', performSearch);
+            
+            clearFiltersBtn.addEventListener('click', function() {
+                searchInput.value = '';
+                regionFilter.value = '';
+                loadDestinations();
+            });
+        });
+        
+        async function loadDestinations() {
+            try {
+                const destinations = await travelAPI.getDestinations();
+                displayDestinations(destinations);
+            } catch (error) {
+                console.error('Error loading destinations:', error);
+                showError('Failed to load destinations');
+            }
+        }
+        
+        async function loadStatistics() {
+            try {
+                const stats = await travelAPI.getDestinationStatistics();
+                updateStats(stats.total, stats.total, stats.totalPopulation);
+            } catch (error) {
+                console.error('Error loading statistics:', error);
+            }
+        }
+        
+        async function loadRegions() {
+            try {
+                const regions = await travelAPI.getRegions();
+                const regionFilter = document.getElementById('regionFilter');
+                
+                // Clear existing options except "All Regions"
+                regionFilter.innerHTML = '<option value="">All Regions</option>';
+                
+                // Add region options
+                regions.forEach(region => {
+                    const option = document.createElement('option');
+                    option.value = region;
+                    option.textContent = region;
+                    regionFilter.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Error loading regions:', error);
+            }
+        }
+        
+        function displayDestinations(destinations) {
+            const grid = document.getElementById('destinationsGrid');
+            const noResults = document.getElementById('noResults');
+            
+            if (destinations.length === 0) {
+                grid.innerHTML = '';
+                noResults.style.display = 'block';
+                return;
+            }
+            
+            noResults.style.display = 'none';
+            
+            grid.innerHTML = destinations.map(dest => `
+                <div class="col">
+                    <div class="destination-card">
+                        <img src="${dest.image}" alt="${dest.name}" class="card-img-top">
+                        <div class="card-body">
+                            <h5 class="card-title">${dest.name}</h5>
+                            <p class="card-text">${dest.description.substring(0, 100)}...</p>
+                            <div class="destination-meta">
+                                <span class="region-badge">${dest.region}</span>
+                                <span class="population-info">
+                                    <i class="fas fa-users me-1"></i>${dest.population}
+                                </span>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <small class="text-muted">
+                                    <i class="fas fa-map-marker-alt me-1"></i>${dest.country}
+                                </small>
+                                <a href="trip-details.html?id=${dest.id}" class="btn btn-primary btn-sm">
+                                    <i class="fas fa-eye me-1"></i>View Details
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            
+            // Add smooth animations
+            const cards = document.querySelectorAll('.destination-card');
+            cards.forEach((card, index) => {
+                card.style.animationDelay = `${index * 0.1}s`;
+                card.classList.add('animate__animated', 'animate__fadeInUp');
+            });
+        }
+        
+        function showError(message) {
+            const grid = document.getElementById('destinationsGrid');
+            grid.innerHTML = `
+                <div class="col-12">
+                    <div class="text-center text-danger py-4">
+                        <i class="fas fa-exclamation-triangle fa-3x mb-3"></i>
+                        <h4>Error</h4>
+                        <p>${message}</p>
+                        <button class="btn btn-primary" onclick="loadDestinations()">
+                            <i class="fas fa-refresh me-2"></i>Try Again
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function clearAllFilters() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('regionFilter').value = '';
+            loadDestinations();
+        }
+        
+        // Update statistics
+        function updateStats(total, filtered, population) {
+            document.getElementById('totalDestinations').textContent = total;
+            document.getElementById('filteredDestinations').textContent = filtered;
+            document.getElementById('totalPopulation').textContent = population;
+        }
+    </script>
+</body>
+</html>

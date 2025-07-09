@@ -1,0 +1,264 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "name": "Ahmed Hassan",
+      "email": "ahmed.hassan@email.com",
+      "avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=100&q=80",
+      "joinDate": "2023-01-15",
+      "totalTrips": 3
+    },
+    {
+      "id": 2,
+      "name": "Fatima Ali",
+      "email": "fatima.ali@email.com",
+      "avatar": "https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=100&q=80",
+      "joinDate": "2023-03-22",
+      "totalTrips": 2
+    },
+    {
+      "id": 3,
+      "name": "Omar Khalil",
+      "email": "omar.khalil@email.com",
+      "avatar": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=100&q=80",
+      "joinDate": "2023-02-10",
+      "totalTrips": 1
+    }
+  ],
+  "destinations": [
+    {
+      "id": 1,
+      "name": "Paris, France",
+      "region": "Europe",
+      "country": "France",
+      "population": "2,161,732",
+      "capital": "Paris",
+      "area": "105.4 km²",
+      "description": "Paris, the capital of France, is a major European city and a global center for art, fashion, gastronomy and culture. Its 19th-century cityscape is crisscrossed by wide boulevards and the River Seine. Beyond such landmarks as the Eiffel Tower and the 12th-century, Gothic Notre-Dame cathedral, the city is known for its cafe culture and designer boutiques along the Rue du Faubourg Saint-Honoré.",
+      "image": "https://images.unsplash.com/photo-1502602898534-47d6b7a83f8f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1368&q=80",
+      "weather": {
+        "current": "22°C",
+        "high": "25°C",
+        "low": "18°C",
+        "condition": "Partly Cloudy"
+      },
+      "attractions": ["Eiffel Tower", "Louvre Museum", "Notre-Dame Cathedral", "Champs-Élysées"],
+      "bestTime": "April to October",
+      "currency": "Euro (EUR)",
+      "language": "French"
+    },
+    {
+      "id": 2,
+      "name": "Tokyo, Japan",
+      "region": "Asia",
+      "country": "Japan",
+      "population": "13,515,271",
+      "capital": "Tokyo",
+      "area": "2,194 km²",
+      "description": "Tokyo, Japan's busy capital, mixes the ultramodern and the traditional, from neon-lit skyscrapers to historic temples. The opulent Meiji Shinto Shrine is known for its towering gate and surrounding woods. The Imperial Palace sits amid large public gardens.",
+      "image": "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1368&q=80",
+      "weather": {
+        "current": "18°C",
+        "high": "22°C",
+        "low": "15°C",
+        "condition": "Sunny"
+      },
+      "attractions": ["Senso-ji Temple", "Tokyo Skytree", "Shibuya Crossing", "Tsukiji Fish Market"],
+      "bestTime": "March to May and September to November",
+      "currency": "Japanese Yen (JPY)",
+      "language": "Japanese"
+    },
+    {
+      "id": 3,
+      "name": "New York, USA",
+      "region": "Americas",
+      "country": "United States",
+      "population": "8,804,190",
+      "capital": "Albany",
+      "area": "778.2 km²",
+      "description": "New York City comprises 5 boroughs sitting where the Hudson River meets the Atlantic Ocean. At its core is Manhattan, a densely populated borough that's among the world's major commercial, financial and cultural centers.",
+      "image": "https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1368&q=80",
+      "weather": {
+        "current": "20°C",
+        "high": "24°C",
+        "low": "16°C",
+        "condition": "Clear"
+      },
+      "attractions": ["Statue of Liberty", "Central Park", "Times Square", "Empire State Building"],
+      "bestTime": "April to June and September to November",
+      "currency": "US Dollar (USD)",
+      "language": "English"
+    },
+    {
+      "id": 4,
+      "name": "Cairo, Egypt",
+      "region": "Africa",
+      "country": "Egypt",
+      "population": "9,540,000",
+      "capital": "Cairo",
+      "area": "606 km²",
+      "description": "Cairo, Egypt's sprawling capital, is set on the Nile River. At its heart is Tahrir Square and the vast Egyptian Museum, a trove of antiquities including royal mummies and gilded King Tutankhamun artifacts.",
+      "image": "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1368&q=80",
+      "weather": {
+        "current": "28°C",
+        "high": "32°C",
+        "low": "22°C",
+        "condition": "Sunny"
+      },
+      "attractions": ["Pyramids of Giza", "Egyptian Museum", "Khan el-Khalili", "Salah El Din Citadel"],
+      "bestTime": "October to April",
+      "currency": "Egyptian Pound (EGP)",
+      "language": "Arabic"
+    },
+    {
+      "id": 5,
+      "name": "Sydney, Australia",
+      "region": "Oceania",
+      "country": "Australia",
+      "population": "5,312,163",
+      "capital": "Canberra",
+      "area": "12,367.7 km²",
+      "description": "Sydney, capital of New South Wales and one of Australia's largest cities, is best known for its harborfront Sydney Opera House, with a distinctive sail-like design. Massive Darling Harbour and the smaller Circular Quay port are hubs of waterside life.",
+      "image": "https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1368&q=80",
+      "weather": {
+        "current": "25°C",
+        "high": "28°C",
+        "low": "20°C",
+        "condition": "Partly Cloudy"
+      },
+      "attractions": ["Sydney Opera House", "Sydney Harbour Bridge", "Bondi Beach", "Taronga Zoo"],
+      "bestTime": "September to November and March to May",
+      "currency": "Australian Dollar (AUD)",
+      "language": "English"
+    },
+    {
+      "id": 6,
+      "name": "Dubai, UAE",
+      "region": "Asia",
+      "country": "United Arab Emirates",
+      "population": "3,331,420",
+      "capital": "Abu Dhabi",
+      "area": "4,114 km²",
+      "description": "Dubai is a city and emirate in the United Arab Emirates known for luxury shopping, ultramodern architecture and a lively nightlife scene. Burj Khalifa, an 830m-tall tower, dominates the skyscraper-filled skyline.",
+      "image": "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1368&q=80",
+      "weather": {
+        "current": "35°C",
+        "high": "38°C",
+        "low": "28°C",
+        "condition": "Sunny"
+      },
+      "attractions": ["Burj Khalifa", "Palm Jumeirah", "Dubai Mall", "Burj Al Arab"],
+      "bestTime": "November to March",
+      "currency": "UAE Dirham (AED)",
+      "language": "Arabic"
+    }
+  ],
+  "trips": [
+    {
+      "id": 1,
+      "userId": 1,
+      "destinationId": 1,
+      "name": "Paris Adventure",
+      "destination": "Paris, France",
+      "region": "Europe",
+      "status": "planned",
+      "startDate": "2024-06-15",
+      "endDate": "2024-06-22",
+      "duration": "7 days",
+      "budget": 2500,
+      "notes": "Planning to visit the Eiffel Tower, Louvre Museum, and enjoy French cuisine",
+      "image": "https://images.unsplash.com/photo-1502602898534-47d6b7a83f8f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1368&q=80",
+      "createdAt": "2024-01-15T10:30:00Z"
+    },
+    {
+      "id": 2,
+      "userId": 1,
+      "destinationId": 2,
+      "name": "Tokyo Exploration",
+      "destination": "Tokyo, Japan",
+      "region": "Asia",
+      "status": "ongoing",
+      "startDate": "2024-05-20",
+      "endDate": "2024-05-30",
+      "duration": "10 days",
+      "budget": 3000,
+      "notes": "Currently exploring the city, visited Senso-ji Temple and Tokyo Skytree",
+      "image": "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1368&q=80",
+      "createdAt": "2024-03-10T14:20:00Z"
+    },
+    {
+      "id": 3,
+      "userId": 1,
+      "destinationId": 3,
+      "name": "New York City",
+      "destination": "New York, USA",
+      "region": "Americas",
+      "status": "completed",
+      "startDate": "2024-03-10",
+      "endDate": "2024-03-15",
+      "duration": "5 days",
+      "budget": 2000,
+      "notes": "Amazing trip! Visited Central Park, Times Square, and the Statue of Liberty",
+      "image": "https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1368&q=80",
+      "createdAt": "2024-02-01T09:15:00Z"
+    },
+    {
+      "id": 4,
+      "userId": 2,
+      "destinationId": 4,
+      "name": "Cairo Historical Tour",
+      "destination": "Cairo, Egypt",
+      "region": "Africa",
+      "status": "planned",
+      "startDate": "2024-07-10",
+      "endDate": "2024-07-17",
+      "duration": "7 days",
+      "budget": 1800,
+      "notes": "Excited to see the Pyramids of Giza and explore ancient Egyptian history",
+      "image": "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1368&q=80",
+      "createdAt": "2024-04-05T16:45:00Z"
+    },
+    {
+      "id": 5,
+      "userId": 2,
+      "destinationId": 5,
+      "name": "Sydney Beach Holiday",
+      "destination": "Sydney, Australia",
+      "region": "Oceania",
+      "status": "completed",
+      "startDate": "2024-01-20",
+      "endDate": "2024-01-27",
+      "duration": "7 days",
+      "budget": 2200,
+      "notes": "Beautiful beaches and the Opera House was spectacular!",
+      "image": "https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1368&q=80",
+      "createdAt": "2023-12-15T11:30:00Z"
+    },
+    {
+      "id": 6,
+      "userId": 3,
+      "destinationId": 6,
+      "name": "Dubai Luxury Experience",
+      "destination": "Dubai, UAE",
+      "region": "Asia",
+      "status": "planned",
+      "startDate": "2024-08-15",
+      "endDate": "2024-08-22",
+      "duration": "7 days",
+      "budget": 3500,
+      "notes": "Planning to visit Burj Khalifa and experience the luxury lifestyle",
+      "image": "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1368&q=80",
+      "createdAt": "2024-05-01T13:20:00Z"
+    }
+  ],
+  "statistics": {
+    "totalUsers": 3,
+    "totalDestinations": 6,
+    "totalTrips": 6,
+    "totalRegions": 5,
+    "totalPopulation": "42,664,567",
+    "averageTripDuration": "7.2 days",
+    "mostPopularRegion": "Asia",
+    "mostPopularDestination": "Paris, France"
+  }
+} 

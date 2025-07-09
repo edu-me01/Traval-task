@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel Planner - Destination Details</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- SweetAlert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .trip-hero {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.9) 0%, rgba(118, 75, 162, 0.9) 100%);
+            padding: 4rem 0 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .trip-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/><circle cx="10" cy="60" r="0.5" fill="white" opacity="0.1"/><circle cx="90" cy="40" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            opacity: 0.3;
+        }
+        
+        .trip-hero h1 {
+            font-weight: 700;
+            color: white;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .trip-hero p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.1rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .breadcrumb-nav {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 1rem 1.5rem;
+            margin: -1rem auto 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 2;
+            max-width: 600px;
+        }
+        
+        .breadcrumb-item a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        
+        .breadcrumb-item a:hover {
+            color: #764ba2;
+        }
+        
+        .breadcrumb-item.active {
+            color: #6c757d;
+        }
+        
+        .trip-details-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .destination-image {
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            margin-bottom: 2rem;
+        }
+        
+        .destination-image img {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        
+        .destination-image:hover img {
+            transform: scale(1.02);
+        }
+        
+        .destination-info {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .destination-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #495057;
+            margin-bottom: 1rem;
+        }
+        
+        .destination-subtitle {
+            color: #6c757d;
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .info-item {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .info-item:hover {
+            background: #e9ecef;
+            transform: translateY(-2px);
+        }
+        
+        .info-icon {
+            font-size: 2rem;
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+        
+        .info-label {
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 0.25rem;
+        }
+        
+        .info-value {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+        
+        .description-section {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .section-title i {
+            margin-right: 0.75rem;
+            color: #667eea;
+        }
+        
+        .description-text {
+            color: #6c757d;
+            line-height: 1.6;
+            font-size: 1rem;
+        }
+        
+        .weather-section {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .weather-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+        
+        .weather-item {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+        
+        .weather-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .weather-temp {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+        
+        .weather-desc {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        .action-buttons {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 12px;
+            padding: 0.75rem 2rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+            margin: 0.5rem;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-outline-primary {
+            border: 2px solid #667eea;
+            color: #667eea;
+            border-radius: 12px;
+            padding: 0.75rem 2rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin: 0.5rem;
+        }
+        
+        .btn-outline-primary:hover {
+            background: #667eea;
+            border-color: #667eea;
+            transform: translateY(-2px);
+        }
+        
+        .loading-spinner {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 4rem;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .spinner-border {
+            width: 3rem;
+            height: 3rem;
+            color: #667eea;
+        }
+        
+        .error-state {
+            text-align: center;
+            padding: 4rem;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .error-state i {
+            font-size: 4rem;
+            color: #dc3545;
+            margin-bottom: 1rem;
+        }
+        
+        .error-state h3 {
+            color: #495057;
+            margin-bottom: 1rem;
+        }
+        
+        .error-state p {
+            color: #6c757d;
+            margin-bottom: 2rem;
+        }
+        
+        @media (max-width: 768px) {
+            .trip-hero {
+                padding: 2rem 0 1rem;
+            }
+            
+            .trip-hero h1 {
+                font-size: 2rem;
+            }
+            
+            .breadcrumb-nav {
+                margin: -0.5rem 1rem 1.5rem;
+                padding: 0.75rem 1rem;
+            }
+            
+            .trip-details-container {
+                margin: 0 1rem 2rem;
+                padding: 1.5rem;
+            }
+            
+            .destination-title {
+                font-size: 2rem;
+            }
+            
+            .info-grid {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                gap: 1rem;
+            }
+            
+            .weather-grid {
+                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="index.html">
+                <i class="fas fa-plane me-2"></i>Travel Planner
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="destinations.html">Destinations</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="my-trips.html">My Trips</a>
+                    </li>
+                </ul>
+                <div class="d-flex">
+                    <a href="auth.html" class="btn btn-outline-light">
+                        <i class="fas fa-user me-2"></i>Login/Register
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="trip-hero">
+        <div class="container text-center">
+            <h1><i class="fas fa-map-marked-alt me-3"></i>Destination Details</h1>
+            <p>Explore everything you need to know about this amazing destination</p>
+        </div>
+    </section>
+
+    <!-- Breadcrumb Navigation -->
+    <div class="container">
+        <nav aria-label="breadcrumb" class="breadcrumb-nav">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item">
+                    <a href="index.html"><i class="fas fa-home me-1"></i>Home</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="destinations.html"><i class="fas fa-globe me-1"></i>Destinations</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">
+                    <i class="fas fa-map-marker-alt me-1"></i>Destination Details
+                </li>
+            </ol>
+        </nav>
+
+        <!-- Trip Details Container -->
+        <div class="trip-details-container">
+            <div class="row" id="destinationDetails">
+                <!-- Loading State -->
+                <div class="col-12">
+                    <div class="loading-spinner">
+                        <div class="spinner-border" role="status">
+                            <span class="visually-hidden">Loading destination details...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Error State -->
+            <div class="error-state" id="errorState" style="display: none;">
+                <i class="fas fa-exclamation-triangle"></i>
+                <h3>Oops! Something went wrong</h3>
+                <p>We couldn't load the destination details. Please try again later.</p>
+                <button class="btn btn-primary" onclick="location.reload()">
+                    <i class="fas fa-refresh me-2"></i>Try Again
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container text-center">
+            <p class="mb-0">&copy; 2023 Travel Planner. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="js/api.js"></script>
+    <script src="js/trips.js"></script>
+    <script>
+        // Enhanced trip details functionality with API integration
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Get destination ID from URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const destinationId = urlParams.get('id');
+            
+            if (!destinationId) {
+                showError('No destination ID provided');
+                return;
+            }
+            
+            // Load destination details
+            await loadDestinationDetails(destinationId);
+        });
+        
+        async function loadDestinationDetails(destinationId) {
+            try {
+                const destination = await travelAPI.getDestinationById(parseInt(destinationId));
+                
+                if (!destination) {
+                    showError('Destination not found');
+                    return;
+                }
+                
+                displayDestinationDetails(destination);
+            } catch (error) {
+                console.error('Error loading destination details:', error);
+                showError('Failed to load destination details');
+            }
+        }
+        
+        function displayDestinationDetails(data) {
+            const container = document.getElementById('destinationDetails');
+            
+            container.innerHTML = `
+                <div class="col-12">
+                    <!-- Destination Image -->
+                    <div class="destination-image">
+                        <img src="${data.image}" alt="${data.name}" class="img-fluid">
+                    </div>
+                    
+                    <!-- Destination Information -->
+                    <div class="destination-info">
+                        <h1 class="destination-title">${data.name}</h1>
+                        <p class="destination-subtitle">Discover the magic of ${data.name}</p>
+                        
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <div class="info-icon">
+                                    <i class="fas fa-globe"></i>
+                                </div>
+                                <div class="info-label">Region</div>
+                                <div class="info-value">${data.region}</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-icon">
+                                    <i class="fas fa-users"></i>
+                                </div>
+                                <div class="info-label">Population</div>
+                                <div class="info-value">${data.population}</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-icon">
+                                    <i class="fas fa-building"></i>
+                                </div>
+                                <div class="info-label">Capital</div>
+                                <div class="info-value">${data.capital}</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-icon">
+                                    <i class="fas fa-ruler-combined"></i>
+                                </div>
+                                <div class="info-label">Area</div>
+                                <div class="info-value">${data.area}</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Description Section -->
+                    <div class="description-section">
+                        <h2 class="section-title">
+                            <i class="fas fa-info-circle"></i>
+                            About ${data.name}
+                        </h2>
+                        <p class="description-text">${data.description}</p>
+                    </div>
+                    
+                    <!-- Additional Information Section -->
+                    <div class="description-section">
+                        <h2 class="section-title">
+                            <i class="fas fa-star"></i>
+                            Attractions & Information
+                        </h2>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h5><i class="fas fa-map-marker-alt me-2"></i>Top Attractions</h5>
+                                <ul class="list-unstyled">
+                                    ${data.attractions.map(attraction => 
+                                        `<li><i class="fas fa-check text-success me-2"></i>${attraction}</li>`
+                                    ).join('')}
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <h5><i class="fas fa-info-circle me-2"></i>Travel Info</h5>
+                                <ul class="list-unstyled">
+                                    <li><i class="fas fa-calendar me-2"></i><strong>Best Time:</strong> ${data.bestTime}</li>
+                                    <li><i class="fas fa-money-bill me-2"></i><strong>Currency:</strong> ${data.currency}</li>
+                                    <li><i class="fas fa-language me-2"></i><strong>Language:</strong> ${data.language}</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Weather Section -->
+                    <div class="weather-section">
+                        <h2 class="section-title">
+                            <i class="fas fa-cloud-sun"></i>
+                            Current Weather
+                        </h2>
+                        <div class="weather-grid">
+                            <div class="weather-item">
+                                <div class="weather-icon">
+                                    <i class="fas fa-thermometer-half"></i>
+                                </div>
+                                <div class="weather-temp">${data.weather.current}</div>
+                                <div class="weather-desc">Current</div>
+                            </div>
+                            <div class="weather-item">
+                                <div class="weather-icon">
+                                    <i class="fas fa-arrow-up"></i>
+                                </div>
+                                <div class="weather-temp">${data.weather.high}</div>
+                                <div class="weather-desc">High</div>
+                            </div>
+                            <div class="weather-item">
+                                <div class="weather-icon">
+                                    <i class="fas fa-arrow-down"></i>
+                                </div>
+                                <div class="weather-temp">${data.weather.low}</div>
+                                <div class="weather-desc">Low</div>
+                            </div>
+                            <div class="weather-item">
+                                <div class="weather-icon">
+                                    <i class="fas fa-cloud"></i>
+                                </div>
+                                <div class="weather-temp">${data.weather.condition}</div>
+                                <div class="weather-desc">Condition</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Action Buttons -->
+                    <div class="action-buttons">
+                        <h3 class="mb-3">Plan Your Trip</h3>
+                        <button class="btn btn-primary" onclick="addToTrips(${data.id})">
+                            <i class="fas fa-plus me-2"></i>Add to My Trips
+                        </button>
+                        <button class="btn btn-outline-primary" onclick="shareDestination()">
+                            <i class="fas fa-share me-2"></i>Share Destination
+                        </button>
+                        <button class="btn btn-outline-primary" onclick="window.history.back()">
+                            <i class="fas fa-arrow-left me-2"></i>Back to Destinations
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function showError(message) {
+            document.getElementById('destinationDetails').style.display = 'none';
+            document.getElementById('errorState').style.display = 'block';
+            document.querySelector('#errorState p').textContent = message;
+        }
+        
+        async function addToTrips(destinationId) {
+            try {
+                const result = await travelAPI.addTrip({
+                    destinationId: destinationId,
+                    status: 'planned',
+                    createdAt: new Date().toISOString()
+                });
+                
+                if (result.success) {
+                    Swal.fire({
+                        title: 'Added to My Trips!',
+                        text: 'This destination has been added to your trip planner.',
+                        icon: 'success',
+                        confirmButtonText: 'Great!'
+                    });
+                } else {
+                    throw new Error('Failed to add trip');
+                }
+            } catch (error) {
+                console.error('Error adding trip:', error);
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Failed to add destination to trips. Please try again.',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+            }
+        }
+        
+        function shareDestination() {
+            // This would implement sharing functionality
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Check out this destination!',
+                    text: 'I found an amazing destination on Travel Planner',
+                    url: window.location.href
+                });
+            } else {
+                // Fallback for browsers that don't support Web Share API
+                navigator.clipboard.writeText(window.location.href);
+                Swal.fire({
+                    title: 'Link Copied!',
+                    text: 'The destination link has been copied to your clipboard.',
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                });
+            }
+        }
+    </script>
+</body>
+</html>
